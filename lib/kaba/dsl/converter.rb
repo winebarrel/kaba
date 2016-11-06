@@ -87,13 +87,6 @@ end
     #{output_rules(lstnr[:rules]).strip}
     EOS
 
-#        {:listener_arn=>
-#          "arn:aws:elasticloadbalancing:ap-northeast-1:822997939312:listener/app/test/c67c874afd293edd/456dd428ede55d55",
-#         :protocol=>"HTTP",
-#         :certificates=>[],
-#         :ssl_policy=>nil,
-#         :default_actions=>[{:type=>"forward", :target_group=>"tesdafdafa"}],
-
     <<-EOS
   listener #{port.inspect} do
     #{body.strip}
@@ -234,5 +227,3 @@ end
     EOS
   end
 end
-
-__END__
