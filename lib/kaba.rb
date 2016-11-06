@@ -1,5 +1,6 @@
-require "kaba/version"
+require 'aws-sdk'
+require 'parallel'
 
-module Kaba
-  # Your code goes here...
-end
+require 'kaba/version'
+require 'kaba/ext/hash_ext'
+require 'kaba/exporter'
