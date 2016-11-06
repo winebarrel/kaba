@@ -37,7 +37,7 @@ class Kaba::DSL::Converter
 
     body += "\n" + <<-EOS
   attributes do
-    #{lb[:attributes].pretty_inspect.gsub(/^/m, "\s" * 4).strip}
+    #{output_hash(lb[:attributes], "\s" * 4).strip}
   end
     EOS
 
@@ -200,14 +200,14 @@ end
 
     body += "\n" + <<-EOS
   attributes do
-    #{tg[:attributes].pretty_inspect.gsub(/^/m, "\s" * 4).strip}
+    #{output_hash(tg[:attributes], "\s" * 4).strip}
   end
     EOS
 
     unless tg[:targets].empty?
       body += "\n" + <<-EOS
   targets do
-    #{tg[:targets].pretty_inspect.gsub(/^/m, "\s" * 4).strip}
+    #{output_hash(tg[:targets], "\s" * 4).strip}
   end
       EOS
     end
@@ -225,5 +225,9 @@ end
     http_code #{matcher[:http_code].inspect}
   end
     EOS
+  end
+
+  def output_hash(hash, indent)
+    hash.pretty_inspect.gsub(/^/m, indent)
   end
 end
