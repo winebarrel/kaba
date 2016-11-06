@@ -86,7 +86,7 @@ class Kaba::Exporter
     resp = @client.describe_target_groups
     target_groups = Parallel.map(resp, in_threads: CONCURRENCY, &:target_groups).flatten
 
-    Parallel.each(target_groups, in_threads: 1) do |tg|
+    Parallel.each(target_groups, in_threads: CONCURRENCY) do |tg|
       arn = tg.target_group_arn
 
       tg_h = {
@@ -103,6 +103,7 @@ class Kaba::Exporter
         health_check_path: tg.health_check_path,
         matcher: tg.matcher.to_h,
         attributes: export_target_group_attributes(arn),
+        targets: export_targets(arn),
       }
 
       tg_by_name[tg.target_group_name] = tg_h
@@ -114,6 +115,17 @@ class Kaba::Exporter
   def export_target_group_attributes(tg_arn)
     resp = @client.describe_target_group_attributes(target_group_arn: tg_arn)
     resp.attributes.map(&:to_a).to_h
+  end
+
+  def export_targets(tg_arn)
+    port_by_instance = {}
+    resp = @client.describe_target_health(target_group_arn: tg_arn)
+
+    resp.target_health_descriptions.each do |thd|
+      port_by_instance[thd.target.id] = thd.target.port
+    end
+
+    port_by_instance
   end
 
   def actions_to_hash_list(actions)

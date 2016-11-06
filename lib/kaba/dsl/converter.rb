@@ -211,6 +211,14 @@ end
   end
     EOS
 
+    unless tg[:targets].empty?
+      body += "\n" + <<-EOS
+  targets do
+    #{tg[:targets].pretty_inspect.gsub(/^/m, "\s" * 4).strip}
+  end
+      EOS
+    end
+
     <<-EOS
 target_group #{name.inspect} do
   #{body.strip}
